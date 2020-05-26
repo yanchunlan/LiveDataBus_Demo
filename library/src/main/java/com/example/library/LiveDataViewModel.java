@@ -1,8 +1,5 @@
 package com.example.library;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-
 import com.example.library.livedata.LiveData;
 
 import java.util.Timer;
@@ -11,7 +8,7 @@ import java.util.TimerTask;
 /**
  * author:  ycl
  * date:  2019/06/01 12:29
- * desc:
+ * desc:  ziji
  */
 public class LiveDataViewModel  {
 

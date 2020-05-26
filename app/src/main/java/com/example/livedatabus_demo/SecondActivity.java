@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import com.example.library.LiveDataBus;
 import com.example.library.LiveDataBus2;
+import com.example.library.LiveDataBus3;
 import com.example.library.livedata.Observer;
 
 public class SecondActivity extends AppCompatActivity implements View.OnClickListener {
@@ -25,6 +26,7 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
         initView();
         initLiveDataBus();
         initLiveDataBus2();
+        initLiveDataBus3();
     }
 
     private void initLiveDataBus() {
@@ -45,6 +47,17 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void onChanged(@Nullable String o) {
                         Log.d(TAG, "LiveDataBus2 onChanged: sendBus3 " + Thread.currentThread().getName() + " value: " + o);
+                    }
+                });
+    }
+
+    private void initLiveDataBus3() {
+        LiveDataBus3.get()
+                .with("sendBus3", String.class)
+                .observe(this,new android.arch.lifecycle.Observer<String>() {
+                    @Override
+                    public void onChanged(@Nullable String o) {
+                        Log.d(TAG, "LiveDataBus3 onChanged: sendBus3 " + Thread.currentThread().getName() + " value: " + o);
                     }
                 });
     }
@@ -73,6 +86,7 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
 
                         LiveDataBus.get().getChannel("sendBus3").postValue("异步消息");
                         LiveDataBus2.get().getChannel("sendBus3").postValue("google 异步消息");
+                        LiveDataBus3.get().with("sendBus3").postValue("google修复之后的 异步消息");
                     }
                 }).start();
                 break;
@@ -83,6 +97,9 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
 
                 LiveDataBus2.get().getChannel("sendBus4").setValue("google 缓存消息1");
                 LiveDataBus2.get().getChannel("sendBus4").setValue("google 缓存消息2");
+
+                LiveDataBus3.get().with("sendBus4").setValue("google修复之后的 缓存消息1");
+                LiveDataBus3.get().with("sendBus4").setValue("google修复之后的 缓存消息2");
                 break;
         }
     }

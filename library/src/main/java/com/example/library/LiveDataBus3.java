@@ -1,17 +1,16 @@
 package com.example.library;
 
 import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.example.library.livedata.LiveData;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import android.arch.lifecycle.Observer;
 import java.util.HashMap;
 import java.util.Map;
 

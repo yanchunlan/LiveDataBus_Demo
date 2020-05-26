@@ -1,6 +1,5 @@
 package com.example.livedatabus_demo;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,10 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.example.library.LiveDataBus;
 import com.example.library.LiveDataBus2;
+import com.example.library.LiveDataBus3;
 import com.example.library.LiveDataViewModel;
 import com.example.library.LiveDataViewModel2;
 import com.example.library.livedata.Observer;
@@ -32,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
         initLiveDataBus1();
         initLiveDataBus2();
+        initLiveDataBus3();
+
 //        initViewModel1();
 //        initViewModel2();
     }
@@ -56,6 +57,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    private void initLiveDataBus3() {
+        LiveDataBus3.get()
+                .with("sendBus1", String.class)
+                .observe(this, new android.arch.lifecycle.Observer<String>() {
+                    @Override
+                    public void onChanged(@Nullable String o) {
+                        Log.d(TAG, "LiveDataBus3 onChanged: sendBus1 " + Thread.currentThread().getName() + " value: " + o);
+                    }
+                });
+        LiveDataBus3.get()
+                .with("sendBus2", String.class)
+                .observe(this, new android.arch.lifecycle.Observer<String>() {
+                    @Override
+                    public void onChanged(@Nullable String o) {
+                        Log.d(TAG, "LiveDataBus3 onChanged: sendBus2 " + Thread.currentThread().getName() + " value: " + o);
+                    }
+                });
+        LiveDataBus3.get()
+                .with("sendBus4", String.class)
+                .observeForever( new android.arch.lifecycle.Observer<String>() {
+                    @Override
+                    public void onChanged(@Nullable String o) {
+                        Log.d(TAG, "LiveDataBus3 observeForever onChanged: sendBus4 " + Thread.currentThread().getName() + " value: " + o);
+                    }
+                });
+    }
     private void initLiveDataBus2() {
         LiveDataBus2.get()
                 .getChannel("sendBus1", String.class)
@@ -127,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_sendBus1:
                 LiveDataBus.get().getChannel("sendBus1").setValue("主线程消息");
                 LiveDataBus2.get().getChannel("sendBus1").setValue("google 主线程消息");
+                LiveDataBus3.get().with("sendBus1").setValue("google修复之后的 主线程消息 ");
                 break;
             // 测试发送子线程消息
             case R.id.btn_sendBus2:
@@ -135,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void run() {
                         LiveDataBus.get().getChannel("sendBus2").postValue("子线程消息");
                         LiveDataBus2.get().getChannel("sendBus2").postValue("google 子线程消息");
+                        LiveDataBus3.get().with("sendBus2").postValue("google修复之后的 子线程消息");
                     }
                 }).start();
                 break;
