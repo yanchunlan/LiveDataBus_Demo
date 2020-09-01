@@ -1,10 +1,10 @@
 package com.example.livedatabus_demo;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +15,8 @@ import com.example.library.LiveDataBus3;
 import com.example.library.LiveDataViewModel;
 import com.example.library.LiveDataViewModel2;
 import com.example.library.livedata.Observer;
+import com.example.livedatabus_demo.livedata2.Main2Activity;
+import com.example.livedatabus_demo.livedata2.ThreeActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mBtnSendBus1;
     private Button mBtnSendBus2;
     private Button mBtnToSendAct;
+    private Button mBtnToMainAct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initViewModel1() {
         LiveDataViewModel2 viewMode = ViewModelProviders.of(this).get(LiveDataViewModel2.class);
-        viewMode.getTime().observe(this, new android.arch.lifecycle.Observer<String>() {
+        viewMode.getTime().observe(this, new androidx.lifecycle.Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 Log.d(TAG, "ViewModel2 onChanged: sendBus1 " + Thread.currentThread().getName() + " value: " + s);
@@ -60,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initLiveDataBus3() {
         LiveDataBus3.get()
                 .with("sendBus1", String.class)
-                .observe(this, new android.arch.lifecycle.Observer<String>() {
+                .observe(this, new androidx.lifecycle.Observer<String>() {
                     @Override
                     public void onChanged(@Nullable String o) {
                         Log.d(TAG, "LiveDataBus3 onChanged: sendBus1 " + Thread.currentThread().getName() + " value: " + o);
@@ -68,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
         LiveDataBus3.get()
                 .with("sendBus2", String.class)
-                .observe(this, new android.arch.lifecycle.Observer<String>() {
+                .observe(this, new androidx.lifecycle.Observer<String>() {
                     @Override
                     public void onChanged(@Nullable String o) {
                         Log.d(TAG, "LiveDataBus3 onChanged: sendBus2 " + Thread.currentThread().getName() + " value: " + o);
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
         LiveDataBus3.get()
                 .with("sendBus4", String.class)
-                .observeForever( new android.arch.lifecycle.Observer<String>() {
+                .observeForever( new androidx.lifecycle.Observer<String>() {
                     @Override
                     public void onChanged(@Nullable String o) {
                         Log.d(TAG, "LiveDataBus3 observeForever onChanged: sendBus4 " + Thread.currentThread().getName() + " value: " + o);
@@ -86,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initLiveDataBus2() {
         LiveDataBus2.get()
                 .getChannel("sendBus1", String.class)
-                .observe(this, new android.arch.lifecycle.Observer<String>() {
+                .observe(this, new androidx.lifecycle.Observer<String>() {
                     @Override
                     public void onChanged(@Nullable String o) {
                         Log.d(TAG, "LiveDataBus2 onChanged: sendBus1 " + Thread.currentThread().getName() + " value: " + o);
@@ -94,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
         LiveDataBus2.get()
                 .getChannel("sendBus2", String.class)
-                .observe(this, new android.arch.lifecycle.Observer<String>() {
+                .observe(this, new androidx.lifecycle.Observer<String>() {
                     @Override
                     public void onChanged(@Nullable String o) {
                         Log.d(TAG, "LiveDataBus2 onChanged: sendBus2 " + Thread.currentThread().getName() + " value: " + o);
@@ -102,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
         LiveDataBus2.get()
                 .getChannel("sendBus4", String.class)
-                .observe(this, new android.arch.lifecycle.Observer<String>() {
+                .observe(this, new androidx.lifecycle.Observer<String>() {
                     @Override
                     public void onChanged(@Nullable String o) {
                         Log.d(TAG, "LiveDataBus2 onChanged: sendBus4 " + Thread.currentThread().getName() + " value: " + o);
@@ -141,10 +144,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnSendBus1 = (Button) findViewById(R.id.btn_sendBus1);
         mBtnSendBus2 = (Button) findViewById(R.id.btn_sendBus2);
         mBtnToSendAct = (Button) findViewById(R.id.btn_toSendAct);
+        mBtnToMainAct = (Button) findViewById(R.id.btn_toMain2Act);
 
         mBtnSendBus1.setOnClickListener(this);
         mBtnSendBus2.setOnClickListener(this);
         mBtnToSendAct.setOnClickListener(this);
+        mBtnToMainAct.setOnClickListener(this);
     }
 
     @Override
@@ -169,6 +174,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_toSendAct:
                 startActivity(new Intent(this, SecondActivity.class));
+                break;
+            case R.id.btn_toMain2Act:
+                startActivity(new Intent(this, Main2Activity.class));
                 break;
         }
     }

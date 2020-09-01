@@ -1,13 +1,13 @@
 package com.example.library;
 
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -96,7 +96,7 @@ public final class LiveDataBus3 {
             }
         }
 
-        private Map<android.arch.lifecycle.Observer, Observer> observerMap = new HashMap<>();
+        private Map<androidx.lifecycle.Observer, Observer> observerMap = new HashMap<>();
         private Handler mainHandler = new Handler(Looper.getMainLooper());
 
         @Override
@@ -105,7 +105,7 @@ public final class LiveDataBus3 {
         }
 
         @Override
-        public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<T> observer) {
+        public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
             super.observe(owner, observer);
             try {
                 hook(observer);
@@ -119,7 +119,7 @@ public final class LiveDataBus3 {
         }
 
         @Override
-        public void observeForever(@NonNull Observer<T> observer) {
+        public void observeForever(@NonNull Observer<? super T> observer) {
             if (!observerMap.containsKey(observer)) {
                 observerMap.put(observer, new ObserverWrapper(observer));
             }
@@ -131,7 +131,7 @@ public final class LiveDataBus3 {
         }
 
         @Override
-        public void removeObserver(@NonNull Observer<T> observer) {
+        public void removeObserver(@NonNull Observer<? super T> observer) {
             Observer realObserver = null;
             if (observerMap.containsKey(observer)) {
                 realObserver = observerMap.remove(observer);
@@ -141,7 +141,10 @@ public final class LiveDataBus3 {
             super.removeObserver(realObserver);
         }
 
-        private void hook(@NonNull Observer<T> observer) throws Exception {
+        /**
+         *  实质上就是把官方的ObserverWrapper 内部的lastVersion = version ,这样当初始化的时候，如果有之前的旧消息就会被拦截，防止重复执行消息分发
+         */
+        private void hook(@NonNull Observer<? super T> observer) throws Exception {
             //get wrapper's version
             Class<LiveData> classLiveData = LiveData.class;
             Field fieldObservers = classLiveData.getDeclaredField("mObservers");

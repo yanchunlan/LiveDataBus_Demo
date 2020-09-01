@@ -1,8 +1,8 @@
 package com.example.livedatabus_demo;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -43,7 +43,7 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
     private void initLiveDataBus2() {
         LiveDataBus2.get()
                 .getChannel("sendBus3", String.class)
-                .observe(this,new android.arch.lifecycle.Observer<String>() {
+                .observe(this,new androidx.lifecycle.Observer<String>() {
                     @Override
                     public void onChanged(@Nullable String o) {
                         Log.d(TAG, "LiveDataBus2 onChanged: sendBus3 " + Thread.currentThread().getName() + " value: " + o);
@@ -54,7 +54,7 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
     private void initLiveDataBus3() {
         LiveDataBus3.get()
                 .with("sendBus3", String.class)
-                .observe(this,new android.arch.lifecycle.Observer<String>() {
+                .observe(this,new androidx.lifecycle.Observer<String>() {
                     @Override
                     public void onChanged(@Nullable String o) {
                         Log.d(TAG, "LiveDataBus3 onChanged: sendBus3 " + Thread.currentThread().getName() + " value: " + o);

@@ -1,6 +1,6 @@
 package com.example.library.livedata;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 /**
  * author:  ycl
